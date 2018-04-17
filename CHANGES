@@ -1,21 +1,19 @@
-0.0002 Not Released
+0.0002 2018-04-17
+
+ * The tests now require Test::More version 0.88 or newer.
 
  * Sync test files with Math-BigInt.
 
- * Add test file t/release-test-version.t.
-
- * Add test file t/release-portability.t.
-
- * Use a MANIFEST.SKIP file based on the default file from ExtUtils::Manifest.
-
- * Format CHANGES according to CPAN::Changes::Spec. Add test file
+ * Add test files t/release-test-version.t, t/release-portability.t, and
    t/release-cpan-changes.t.
 
- * Convert t/03podcov.t -> t/release-pod-coverage.t.
+ * Use a MANIFEST.SKIP file based on the default file in the ExtUtils-Manifest
+   distribution.
 
- * Convert t/02pod.t -> t/release-pod.t.
+ * Format CHANGES according to CPAN::Changes::Spec.
 
- * Increment version number.
+ * Convert test file t/02pod.t to t/release-pod.t and t/03podcov.t to
+   t/release-pod-coverage.t.
 
 0.0001 2017-01-11
 
