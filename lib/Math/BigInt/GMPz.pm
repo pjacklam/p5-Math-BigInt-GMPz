@@ -70,6 +70,23 @@ sub _from_bytes {
     return $rop;
 }
 
+sub _from_base {
+    my $class = shift;
+
+    # If a collation sequence is given, pass everything to parent.
+    return $class -> SUPER::_from_base(@_) if @_ == 3;
+
+    # If base > 36, pass everything to parent.
+    my $str   = $_[0];
+    my $base  = $_[1];
+    $base = $class -> _new($base) unless ref($base);
+    if ($class -> _acmp($base, $class -> _new("36")) > 0) {
+        return $class -> SUPER::_from_base($str, $base);
+    } else {
+        return Rmpz_init_set_str($str, $base);
+    }
+}
+
 sub _1ex  {
     Rmpz_init_set_str("1" . ("0" x $_[1]));
 }
