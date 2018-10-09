@@ -410,7 +410,7 @@ an XS layer on top of the very fast gmplib library. See https://gmplib.org/
 
 Math::BigInt::GMPz inherits from Math::BigInt::Lib.
 
-=head METHODS
+=head1 METHODS
 
 The following methods are implemented.
 
