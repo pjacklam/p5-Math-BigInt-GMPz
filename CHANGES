@@ -1,5 +1,7 @@
 0.0003
 
+ * List implemented methods in POD.
+
  * Update MANIFEST.SKIP.
 
  * Sync test files with Math-BigInt.
