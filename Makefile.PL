@@ -34,7 +34,7 @@ WriteMakefile
    # it.
 
    'TEST_REQUIRES'      => {
-                            'Test::More'          => 0.88,
+                            'Test::More'          => 0.82,
                            },
 
    'LICENSE'            => 'perl_5',
