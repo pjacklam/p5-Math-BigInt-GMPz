@@ -1,3 +1,7 @@
+0.0004 Not Released
+
+ * Add methods _fib() and _lucas().
+
 0.0003 2018-10-09
 
  * List implemented methods in POD.
