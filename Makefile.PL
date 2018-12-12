@@ -42,4 +42,15 @@ WriteMakefile
    'DEFINE'             => '',          # e.g., '-DHAVE_SOMETHING'
    'INC'                => '',          # e.g., '-I/usr/include/other'
    'SIGN'               => 1,
+
+   'META_MERGE'         => {
+       'meta-spec' => { version => 2 },
+        resources => {
+            repository => {
+                type => 'git',
+                url  => 'https://github.com/pjacklam/p5-Math-BigInt-GMPz.git',
+                web  => 'https://github.com/pjacklam/p5-Math-BigInt-GMPz',
+            },
+        },
+    },
   );
