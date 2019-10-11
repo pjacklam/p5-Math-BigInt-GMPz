@@ -1,6 +1,8 @@
-0.0004 Not Released
+0.0004 2019-10-10
 
  * Add methods _fib() and _lucas().
+
+ * Sync test files with Math-BigInt.
 
 0.0003 2018-10-09
 
