@@ -1,3 +1,7 @@
+0.0006 2021-07-03
+
+ * Require Math::GMPz version 0.36.
+
 0.0005 2021-07-02
 
  * Fix _lsft() and _rsft() so they don't hang.

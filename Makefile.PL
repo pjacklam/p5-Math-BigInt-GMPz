@@ -26,7 +26,7 @@ WriteMakefile
 
    'PREREQ_PM'          => {
                             'Math::BigInt'        => 1.999819,
-                            'Math::GMPz'          => 0,
+                            'Math::GMPz'          => 0.36,
                            },
 
    # A hash of modules that are needed to test the module but not run or build
