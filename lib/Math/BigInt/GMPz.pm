@@ -350,8 +350,7 @@ sub _len {
 
 sub _zeros {
     return 0 unless Rmpz_cmp($_[1], $zero);     # 0 has no trailing zeros
-    my $str = Rmpz_get_str($_[1], 10);
-    $str =~ /(0*)\z/;
+    Rmpz_get_str($_[1], 10) =~ /(0*)\z/;
     return length($1);
 }
 
