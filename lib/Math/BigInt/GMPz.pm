@@ -177,7 +177,8 @@ sub _pow {
 
 sub _modinv {
     my $bool = Rmpz_invert($_[1], $_[1], $_[2]);
-    return $bool ? ($_[1], '+') : (undef, undef);
+    return $_[1], '+' if $bool;
+    return;
 }
 
 sub _modpow {
