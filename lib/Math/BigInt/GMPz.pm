@@ -12,18 +12,18 @@ our $VERSION = '0.0013';
 
 use Math::GMPz 0.36 qw< :mpz >;
 
-###############################################################################
-# It might be that Math::GMPz was built with an newer version of GMP than the
-# one that is currently available. Checking Math::GMPz::gmp_v() won't help,
-# since it returns the version of GMP used when Math::GMPz was built, not the
-# version of GMP that is currently available.
+BEGIN {
+    # We need GMP 5.1.0 or newer for Rmpz_2fac_ui(). If Rmpz_2fac_ui() is not
+    # implemented, Math::GMPz dies with the message:
+    # "Rmpz_2fac_ui not implemented - gmp-5.1.0 (or later) is needed"
 
-eval { my $x = Rmpz_init(); Rmpz_2fac_ui($x, 0); };
-
-# If Rmpz_2fac_ui() is not implemented, Math::GMPz dies with the message:
-# "Rmpz_2fac_ui not implemented - gmp-5.1.0 (or later) is needed"
-
-die "gmp-5.1.0 (or later) is needed" if $@;
+    my $gmp_v = Math::GMPz::gmp_v();
+    my @gmp_v = split /\./, $gmp_v;
+    my $gmp_v_int = 1e6 * $gmp_v[0] + 1e3 * $gmp_v[1] + $gmp_v[0];
+    die "GMP library is not recent enough;",
+      " we have $gmp_v, but we need 5.1.0 or later"
+      unless $gmp_v_int >= 5_100_000;
+}
 
 ###############################################################################
 
