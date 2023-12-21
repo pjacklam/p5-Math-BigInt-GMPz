@@ -54,6 +54,7 @@ The following methods are implemented.
 - \_modpow()
 - \_rsft()
 - \_lsft()
+- \_log\_int()
 - \_gcd()
 - \_lcm()
 - \_and()

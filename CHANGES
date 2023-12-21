@@ -1,3 +1,9 @@
+0.0014 2023-12-21
+
+ * Implement _log_int() via Rmpz_sizeinbase().
+
+ * Sync test files with Math-BigInt.
+
 0.0013 2023-09-21
 
  * Fix CPAN RT #147612. The "perl Makefile.PL" step would fail if Math::GMPz
