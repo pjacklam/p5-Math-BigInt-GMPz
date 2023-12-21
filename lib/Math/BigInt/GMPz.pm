@@ -229,7 +229,57 @@ sub _lsft {
     return $_[1];
 }
 
-#sub _log_int { }
+sub _log_int {
+    my ($class, $x, $b) = @_;
+
+    # Return undef for the logarithm of zero.
+
+    return if $class -> _is_zero($x);
+
+    # Rmpz_sizeinbase() requires that the base is <= 62.
+
+    my $bscl;                   # the base as a Perl scalar
+    if (ref $b) {
+        $bscl = $class -> _num($b);
+    }  else {
+        ($bscl, $b) = ($b, $class -> _new($b));
+    }
+
+    return                                   if $bscl < 2;
+    return $class -> SUPER::_log_int($x, $b) if $bscl > 62;
+
+    # Rmpz_sizeinbase() returns a Perl scalar that is either 1 or 2 too big
+    # compared to the output we want, i.e., int(log(x) / log(b)).
+
+    my $y = Rmpz_sizeinbase($x, $bscl);
+    $y = $class -> _new($y - 1);
+
+    # To determine whether we need to subtract one more, we need to go
+    # backwards and compute $b ** $y, unfortunately.
+
+    my $trial = $class -> _pow($class -> _copy($b), $y);
+    my $acmp  = $class -> _acmp($trial, $x);
+
+    # Did we get the exact result?
+
+    if ($acmp == 0) {
+        return $y, 1 if wantarray;
+        return $y;
+    }
+
+    # Decrement $y once more, if the output was too large.
+
+    $y = $class -> _dec($y) if $acmp > 0;
+    return $y unless wantarray;
+
+    # If the user wants to know whether the output is exact or not, we need to
+    # update $acmp after the decrement above.
+
+    $trial = $class -> _div($trial, $b);
+    $acmp  = $class -> _acmp($trial, $x);
+    return $y, 1 if $acmp == 0;         # result is exact
+    return $y, 0;                       # result is too small
+}
 
 sub _gcd {
     Rmpz_gcd($_[1], $_[1], $_[2]);
@@ -514,6 +564,8 @@ The following methods are implemented.
 =item _rsft()
 
 =item _lsft()
+
+=item _log_int()
 
 =item _gcd()
 
