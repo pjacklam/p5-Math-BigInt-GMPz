@@ -55,6 +55,8 @@ The following methods are implemented.
 - \_rsft()
 - \_lsft()
 - \_log\_int()
+- \_ilog2()
+- \_clog2()
 - \_gcd()
 - \_lcm()
 - \_and()
