@@ -281,6 +281,92 @@ sub _log_int {
     return $y, 0;                       # result is too small
 }
 
+sub _ilog2 {
+    my ($class, $x) = @_;
+
+    # Return undef for the logarithm of zero.
+
+    return if $class -> _is_zero($x);
+
+    # Rmpz_sizeinbase() returns a Perl scalar that is either 1 or 2 too big
+    # compared to the output we want, i.e., int(log(x) / log(2)).
+
+    my $y = Rmpz_sizeinbase($x, 2) - 1;
+
+    # To determine whether we need to subtract one more, we need to go
+    # backwards and compute 2 ** $y, unfortunately.
+
+    my $trial = Rmpz_init_set_str("1", 10);     # $trial = 1
+    Rmpz_mul_2exp($trial, $trial, $y);          # $trial = 2**$y
+
+    # Make $y an object.
+
+    $y = Rmpz_init_set_ui($y);
+
+    # Did we get the exact result?
+
+    my $acmp = Rmpz_cmp($trial, $x);
+
+    if ($acmp == 0) {
+        return $y, 1 if wantarray;
+        return $y;
+    }
+
+    # Decrement $y once more, if the output was too large.
+
+    Rmpz_sub_ui($y, $y, 1) if $acmp > 0;        # $y -= 1
+
+    return $y unless wantarray;
+
+    # If the user wants to know whether the output is exact or not, we need to
+    # update $acmp after the decrement above.
+
+    Rmpz_div_2exp($trial, $trial, 1);
+    $acmp = Rmpz_cmp($trial, $x);
+    return $y, 1 if $acmp == 0;                 # result is exact
+    return $y, 0;                               # result is too small
+}
+
+sub _clog2 {
+    my ($class, $x) = @_;
+    # Return undef for the logarithm of zero.
+
+    return if $class -> _is_zero($x);
+
+    # Rmpz_sizeinbase() returns a Perl scalar that is either correct or 1 too
+    # big compared to the output we want, i.e., ceil(log(x) / log(2)).
+
+    my $y = Rmpz_sizeinbase($x, 2) - 1;         # assume 1 too big
+
+    # Go backwards and compute 2 ** $y.
+
+    my $trial = Rmpz_init_set_str("1", 10);     # $trial = 1
+    Rmpz_mul_2exp($trial, $trial, $y);          # $trial = 2**$y
+    $y = Rmpz_init_set_ui($y);                  # make $y an object
+
+    # Did we get the exact result?
+
+    my $acmp = Rmpz_cmp($trial, $x);
+
+    if ($acmp == 0) {
+        return $y, 1 if wantarray;
+        return $y;
+    }
+
+    # Increment $y by one, if the output was too small.
+
+    Rmpz_add_ui($y, $y, 1) if $acmp < 0;        # $y += 1
+    return $y unless wantarray;
+
+    # If the user wants to know whether the output is exact or not, we need to
+    # update $acmp after the increment above.
+
+    Rmpz_mul_2exp($trial, $trial, 1);
+    $acmp = Rmpz_cmp($trial, $x);
+    return $y, 1 if $acmp == 0;                 # result is exact
+    return $y, 0;                               # result is too small
+}
+
 sub _gcd {
     Rmpz_gcd($_[1], $_[1], $_[2]);
     return $_[1];
@@ -566,6 +652,10 @@ The following methods are implemented.
 =item _lsft()
 
 =item _log_int()
+
+=item _ilog2()
+
+=item _clog2()
 
 =item _gcd()
 
