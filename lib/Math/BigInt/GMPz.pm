@@ -245,7 +245,12 @@ sub _log_int {
         ($bscl, $b) = ($b, $class -> _new($b));
     }
 
-    return                                   if $bscl < 2;
+    # A base < 2 is invalid.
+
+    return if $bscl < 2;
+
+    # A base > 62 can't be handled by Math::GMPz.
+
     return $class -> SUPER::_log_int($x, $b) if $bscl > 62;
 
     # Rmpz_sizeinbase() returns a Perl scalar that is either 1 or 2 too big
@@ -262,10 +267,7 @@ sub _log_int {
 
     # Did we get the exact result?
 
-    if ($acmp == 0) {
-        return $y, 1 if wantarray;
-        return $y;
-    }
+    return wantarray ? ($y, 1) : $y if $acmp == 0;
 
     # Decrement $y once more, if the output was too large.
 
@@ -277,8 +279,8 @@ sub _log_int {
 
     $trial = $class -> _div($trial, $b);
     $acmp  = $class -> _acmp($trial, $x);
-    return $y, 1 if $acmp == 0;         # result is exact
-    return $y, 0;                       # result is too small
+    return wantarray ? ($y, 1) : $y if $acmp == 0;      # result is exact
+    return wantarray ? ($y, 0) : $y;                    # result is too small
 }
 
 sub _ilog2 {
@@ -307,10 +309,7 @@ sub _ilog2 {
 
     my $acmp = Rmpz_cmp($trial, $x);
 
-    if ($acmp == 0) {
-        return $y, 1 if wantarray;
-        return $y;
-    }
+    return wantarray ? ($y, 1) : $y if $acmp == 0;
 
     # Decrement $y once more, if the output was too large.
 
@@ -323,8 +322,8 @@ sub _ilog2 {
 
     Rmpz_div_2exp($trial, $trial, 1);
     $acmp = Rmpz_cmp($trial, $x);
-    return $y, 1 if $acmp == 0;                 # result is exact
-    return $y, 0;                               # result is too small
+    return wantarray ? ($y, 1) : $y if $acmp == 0;      # result is exact
+    return wantarray ? ($y, 0) : $y;                    # result is too small
 }
 
 sub _clog2 {
@@ -348,10 +347,7 @@ sub _clog2 {
 
     my $acmp = Rmpz_cmp($trial, $x);
 
-    if ($acmp == 0) {
-        return $y, 1 if wantarray;
-        return $y;
-    }
+    return wantarray ? ($y, 1) : $y if $acmp == 0;
 
     # Increment $y by one, if the output was too small.
 
@@ -363,8 +359,8 @@ sub _clog2 {
 
     Rmpz_mul_2exp($trial, $trial, 1);
     $acmp = Rmpz_cmp($trial, $x);
-    return $y, 1 if $acmp == 0;                 # result is exact
-    return $y, 0;                               # result is too small
+    return wantarray ? ($y, 1) : $y if $acmp == 0;      # result is exact
+    return wantarray ? ($y, 0) : $y;                    # result is too small
 }
 
 sub _gcd {
